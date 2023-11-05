@@ -1,0 +1,44 @@
+//let models = require("../models/models");
+const bcrypt = require("bcryptjs")
+const process = require('dotenv')
+const cryptoTools = require('../jwt/CryptoTools');
+
+module.exports = function createDefault(args, Contributor) {
+
+    const { email, role, firstName, lastName, description, password } = args;
+
+    Contributor.findAll({ where: { email } })
+        .then(resultArray => {
+
+            if (resultArray.length === 0) {
+                console.log("no default user present")
+                bcrypt.genSalt(10, (err, salt) => {
+
+                    if (!err) {
+                        console.log(email);
+                        cryptoTools.encrypt(email)
+                            .then(apiKey => {
+                                console.log(apiKey)
+                                bcrypt.hash(password, salt, (err, hash) => {
+                                    console.log(hash);
+                                    const payload = {
+                                        email, role, firstName, lastName, description, password: hash
+                                    }
+                                    Contributor.create(payload).then(i => {
+                                        console.log({ message: i, err: "" })
+                                    });
+                                })
+                            })
+                            .catch(e => {
+                                console.log({ message: "", error: e })
+                            })
+
+                    } else {
+                        console.log({ message: "", error: err })
+                    }
+                })
+            } else {
+                console.log({ message: "", error: "that user already exists" })
+            }
+        })
+}

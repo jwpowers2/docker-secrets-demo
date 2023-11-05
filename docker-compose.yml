@@ -1,0 +1,38 @@
+version: "3.7"
+services:
+  db:
+    build: ./db
+    restart: always
+    secrets:
+      - POSTGRES_PASSWORD
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD_FILE=/run/secrets/POSTGRES_PASSWORD
+      - POSTGRES_DB=botlist
+      - DATABASE_HOST=localhost
+    volumes:
+      - "postgresdata:/data/db"
+    ports:
+      - 5432:5432
+  server:
+    build: ./server
+    secrets:
+      - POSTGRES_PASSWORD
+      - TOKEN_SECRET
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD_FILE=/run/secrets/POSTGRES_PASSWORD
+      - TOKEN_SECRET_FILE=/run/secrets/TOKEN_SECRET
+      - POSTGRES_DB=botlist
+      - DATABASE_HOST=localhost
+    depends_on:
+      - db
+    ports:
+      - 5000:5000
+secrets:
+  POSTGRES_PASSWORD:
+    file: postgres_password.txt
+  TOKEN_SECRET:
+    file: token_secret.txt
+volumes:
+  postgresdata:
