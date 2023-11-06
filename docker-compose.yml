@@ -8,31 +8,33 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD_FILE=/run/secrets/POSTGRES_PASSWORD
-      - POSTGRES_DB=botlist
+      - POSTGRES_DB=rocks
       - DATABASE_HOST=localhost
     volumes:
       - "postgresdata:/data/db"
     ports:
       - 5432:5432
-  server:
-    build: ./server
+  api:
+    build: ./api
     secrets:
-      - POSTGRES_PASSWORD
-      - TOKEN_SECRET
+      - DB_CONN
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD_FILE=/run/secrets/POSTGRES_PASSWORD
-      - TOKEN_SECRET_FILE=/run/secrets/TOKEN_SECRET
-      - POSTGRES_DB=botlist
-      - DATABASE_HOST=localhost
+      - DB_CONN_FILE=/run/secrets/DB_CONN
     depends_on:
       - db
     ports:
       - 5000:5000
+    
+  nextjs:
+    build: ./nextjs
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
 secrets:
+  DB_CONN:
+    file: db_conn.txt
   POSTGRES_PASSWORD:
     file: postgres_password.txt
-  TOKEN_SECRET:
-    file: token_secret.txt
 volumes:
   postgresdata:

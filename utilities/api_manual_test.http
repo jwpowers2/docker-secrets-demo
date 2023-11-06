@@ -1,98 +1,55 @@
-@hostname=http://localhost:5000
+@hostname1=http://localhost:5000
 
-@id=b6cb052d-8bf5-4162-b22c-f10d3e8b1aa9
-# consumer port is 5000, producer port is 3000
+# api server is on 5000, nextjs api is on 3000
 
-GET {{hostname}}/api/contributor/all
-
-###
-
-GET {{hostname}}/all/contributor/{{id}}
+GET {{hostname1}}/api/rocks/all
 
 ###
-# create a contributor
-POST {{hostname}}/api/contributor/create
+
+POST {{hostname1}}/api/rocks/create
 Content-Type: application/json
 
 {
-    "firstName":"Johnny",
-    "lastName":"Powers", 
-    "role":"user", 
-    "email":"j@l.com", 
-    "description":"developer",
-    "password":"password"
+    "name":"sandstone","texture":"rough","color":"tan"
 }
 ###
 
-PUT {{hostname}}/api/contributor/{{id}}
+PUT {{hostname1}}/api/rocks/1
 Content-Type: application/json
 
 {
-    "firstName":"bob", "lastName":"evans"
+    "name":"sandstone","texture":"smooth","color":"white"
 }
 
 ###
 
-DELETE {{hostname}}/api/contributor/{{id}}
+DELETE {{hostname1}}/api/rocks/3
+
+### nextjs api below
+
+@hostname2=http://localhost:3000
+
+# api server is on 5000, nextjs api is on 3000
+
+GET {{hostname2}}/api/rocks
 
 ###
 
-POST {{hostname}}/api/authentication/login
+POST {{hostname2}}/api/rocks
 Content-Type: application/json
 
 {
-    "email":"j@j.com",
-    "password": "password"
+    "name":"sandstone","texture":"rough","color":"tan"
+}
+###
+
+PUT {{hostname2}}/api/rocks/1
+Content-Type: application/json
+
+{
+    "name":"sandstone","texture":"smooth","color":"white"
 }
 
 ###
 
-
-POST {{hostname}}/api/authentication/logout
-Content-Type: application/json
-
-{
-    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTk0MDUxMTMsImRhdGEiOiJqQGouY29tIiwiaWF0IjoxNjk5MjA1MTEzfQ.-RiwcG0UhjilV5CR9fvcuaE32VgxSzjnJlNLlI4RXJI"
-}
-
-###
-
-POST {{hostname}}/api/article/create
-Content-Type: application/json
-
-{
-    "name":"test article user role and IS NOT approved num 2", 
-    "content":[
-        {"label":"h4", "text":"Lorem ipsum dolor"},
-        {"label": "code", "language":"javascript", "text":"const test = (test) => { console.log('test')"},
-        {"label": "p", "text": "Magna sit amet purus gravida quis blandit turpis cursus. Dolor sit amet consectetur adipiscing elit pellentesque. Imperdiet massa tincidunt nunc pulvinar sapien et. Et malesuada fames ac turpis egestas integer. Id nibh tortor id aliquet lectus proin nibh nisl condimentum. Consectetur purus ut faucibus pulvinar elementum integer enim. Sit amet nulla facilisi morbi tempus iaculis urna id. Sed arcu non odio euismod lacinia at. Faucibus vitae aliquet nec ullamcorper sit amet risus nullam. Amet massa vitae tortor condimentum. Mauris cursus mattis molestie a iaculis. At augue eget arcu dictum varius duis at consectetur. Commodo odio aenean sed adipiscing diam donec adipiscing. Hac habitasse platea dictumst quisque sagittis purus. Amet justo donec enim diam vulputate ut pharetra sit. Molestie nunc non blandit massa enim nec dui."}
-        ],
-    "approvalStatus":"notApproved", 
-    "subject":"web things", 
-    "mood":"positive", 
-    "series":"none",
-    "keywords":["javascript", "react.js"],
-    "apiKey":"U2FsdGVkX19dBTEyYhsyGyDiJLL3BHFaoXcZmTOkvLQ="
-}
-
-###
-
-GET {{hostname}}/api/article/all/subject/web crap
-
-###
-// get one
-
-GET {{hostname}}/api/article/3cbd45dd-69d2-4059-8cff-3e8880c48cbc
-
-###
-
-GET {{hostname}}/api/contributor/all
-
-
-###
-
-GET {{hostname}}/api/article/trending-topics
-
-###
-
-GET {{hostname}}/api/article/most-recent
+DELETE {{hostname1}}/api/rocks/3
